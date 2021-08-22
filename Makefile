@@ -55,16 +55,12 @@ export PROJECT_CONFIG_FILE
 
 # simply expanded variables
 CONFIG_EXT := .cfg
-SHELL_TEMPLATE_EXT := .shtpl
-config_shell_template_ext := ${CONFIG_EXT}${SHELL_TEMPLATE_EXT}
-shell_template_wildcard := %${SHELL_TEMPLATE_EXT}
 config_wildcard := %${CONFIG_EXT}
+SHELL_TEMPLATE_EXT := .shtpl
+shell_template_wildcard := %${SHELL_TEMPLATE_EXT}
+config_shell_template_ext := ${CONFIG_EXT}${SHELL_TEMPLATE_EXT}
 config_shell_template_wildcard := %${CONFIG_EXT}${SHELL_TEMPLATE_EXT}
 config_shell_templates := $(shell find ${CURDIR} -name *${config_shell_template_ext})
-
-# inspired from:
-# https://stackoverflow.com/questions/5618615/check-if-a-program-exists-from-a-makefile#answer-25668869
-_check_executables := $(foreach exec,${executables},$(if $(shell command -v ${exec}),pass,$(error "No ${exec} in PATH")))
 
 # Determines the config name(s) to be generated from the template(s).
 # Short hand notation for string substitution: $(text:pattern=replacement).
@@ -75,16 +71,16 @@ ${HELP}:
 	# inspired by the makefiles of the Linux kernel and Mercurial
 >	@echo 'Available make targets:'
 >	@echo '  ${PROJECT_CONFIG_FILE_NAME}            - generates the configuration file to be used by other'
->	@echo '                     make targets. Particularly targets formed from shell'
+>	@echo '                     make targets. Particularly targets that utilize shell'
 >	@echo '                     templates.'
 >	@echo '  ${CONFIGS}          - generates the configuration files to be used'
->	@echo '  ${CLEAN}            - removes files generated from all targets'
-
-.PHONY: ${CONFIGS}
-${CONFIGS}: ${configs}
+>	@echo '  ${CLEAN}            - removes files generated from other targets'
 
 ${PROJECT_CONFIG_FILE_NAME}:
 >	eval "$${PROJECT_CONFIG_FILE}" > "${CURDIR}/${PROJECT_CONFIG_FILE_NAME}"
+
+.PHONY: ${CONFIGS}
+${CONFIGS}: ${configs}
 
 # custom implicit rules for the above targets
 ${config_wildcard}: ${config_shell_template_wildcard} ${PROJECT_CONFIG_FILE_NAME}
