@@ -16,6 +16,7 @@ ENVSUBST = envsubst
 
 # default var values
 MAX_ROOT_PARTITION_SIZE_DEFAULT = -1  \# indicates unlimited partition size
+DISK_DEFAULT = "/dev/sda"  \# e.g. /dev/sda, not /dev/discs/disc0/disc
 
 # should list all the vars in the multiline var below
 NORMAL_USER_NAME = $${NORMAL_USER_NAME}
@@ -24,13 +25,17 @@ NORMAL_USER_FULL_NAME = $${NORMAL_USER_FULL_NAME}
 MAX_SWAP_PARTITION_SIZE = $${MAX_SWAP_PARTITION_SIZE}
 MAX_ROOT_PARTITION_SIZE = $${MAX_ROOT_PARTITION_SIZE}
 LUKS_PASSPHRASE = $${LUKS_PASSPHRASE}
+GITHUB_API_TOKEN = $${GITHUB_API_TOKEN}
+DISK = $${DISK}
 project_config_file_vars = \
 	${NORMAL_USER_NAME}\
 	${NORMAL_USER_PASSWORD}\
 	${NORMAL_USER_FULL_NAME}\
 	${MAX_SWAP_PARTITION_SIZE}\
 	${MAX_ROOT_PARTITION_SIZE}\
-	${LUKS_PASSPHRASE}
+	${LUKS_PASSPHRASE}\
+	${GITHUB_API_TOKEN}\
+	${DISK}
 
 define PROJECT_CONFIG_FILE =
 cat << _EOF_
@@ -38,7 +43,7 @@ cat << _EOF_
 #
 # Config file to centralize vars, and to aggregate common vars.
 
-# needed to construct buster_preseed_gerald
+# needed to construct gerald_debian_preseed.cfg
 export NORMAL_USER_NAME=
 export NORMAL_USER_PASSWORD=
 export NORMAL_USER_FULL_NAME=
@@ -46,6 +51,8 @@ export NORMAL_USER_FULL_NAME=
 export MAX_SWAP_PARTITION_SIZE=
 export MAX_ROOT_PARTITION_SIZE=${MAX_ROOT_PARTITION_SIZE_DEFAULT}
 export LUKS_PASSPHRASE=
+export GITHUB_API_TOKEN=
+export DISK=${DISK_DEFAULT}
 _EOF_
 endef
 # Use the $(value ...) function if there are other variables in the multi-line
