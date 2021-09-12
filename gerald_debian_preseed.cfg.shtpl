@@ -205,10 +205,10 @@ d-i	popularity-contest/participate	boolean	false
 d-i preseed/late_command string \
     in-target mkdir --parents "/usr/local/bin" && \
         artifact_url="$(curl --silent --user cavcrosby:'${GITHUB_API_TOKEN}' \
-            --header https://api.github.com/repos/cavcrosby/debcomprt/actions/artifacts \
+            --header 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/cavcrosby/debcomprt/actions/artifacts \
             | jq --raw-output '.["artifacts"][0]["archive_download_url"]')" && \
         actual_artifact_url="$(curl --include --user cavcrosby:'${GITHUB_API_TOKEN}' \
-            --header "${artifact_url}" \
+            --header 'Accept: application/vnd.github.v3+json' "${artifact_url}" \
             | grep --only-matching 'https://[[:alnum:][:punct:]]*')" && \
         curl --output artifacts.zip "${actual_artifact_url}" && \
         unzip artifacts.zip -d "/usr/local/bin"
