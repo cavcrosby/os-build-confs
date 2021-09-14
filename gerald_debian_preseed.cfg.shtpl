@@ -167,7 +167,8 @@ d-i pkgsel/include string \
     git \
     jq \
     linux-headers-$(uname --kernel-release) \
-    sudo
+    sudo \
+    unzip
 
 # Whether to upgrade packages after debootstrap.
 # Allowed values: none, safe-upgrade, full-upgrade
@@ -203,14 +204,11 @@ d-i	popularity-contest/participate	boolean	false
 # directly, or use the apt-install and in-target commands to easily install
 # packages and run commands in the target system.
 d-i preseed/late_command string \
-    in-target mkdir --parents "/usr/local/bin" && \
-        artifact_url="$(curl --silent --user cavcrosby:'${GITHUB_API_TOKEN}' \
-            --header 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/cavcrosby/debcomprt/actions/artifacts \
-            | jq --raw-output '.["artifacts"][0]["archive_download_url"]')" && \
-        actual_artifact_url="$(curl --include --user cavcrosby:'${GITHUB_API_TOKEN}' \
-            --header 'Accept: application/vnd.github.v3+json' "${artifact_url}" \
-            | grep --only-matching 'https://[[:alnum:][:punct:]]*')" && \
-        curl --output artifacts.zip "${actual_artifact_url}" && \
-        unzip artifacts.zip -d "/usr/local/bin"
+    in-target mkdir --parents '/usr/local/bin'; \
+    in-target /bin/sh -c "wget --quiet --output-document - --header 'Authorization: token ${GITHUB_API_TOKEN}' --header='Content-Type:application/json' --header 'Accept: application/vnd.github.v3+json' 'https://api.github.com/repos/cavcrosby/debcomprt/actions/artifacts' | jq --raw-output '.[\"artifacts\"][0][\"archive_download_url\"]' > artifact_url"; \
+    in-target wget --quiet --output-document 'artifacts.zip' --input-file artifact_url --header 'Authorization: token ${GITHUB_API_TOKEN}' --header='Content-Type:application/json' --header 'Accept: application/vnd.github.v3+json'; \
+    in-target unzip 'artifacts.zip' -d '/usr/local/bin'; \
+    in-target chmod 755 '/usr/local/bin/debcomprt'; \
+    in-target rm --force 'artifacts.zip' 'artifact_url'
 
 #_preseed_V1
