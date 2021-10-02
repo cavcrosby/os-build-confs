@@ -2,6 +2,7 @@
 #### Contents of the preconfiguration file (for buster/Debian 10)
 #### Based from example: https://www.debian.org/releases/buster/example-preseed.txt
 #### Anything missing assumes the default value based in the example preseed.
+
 ### Localization
 # Preseeding only locale sets language, country and locale.
 d-i debian-installer/locale string en_US.UTF-8
@@ -165,7 +166,6 @@ tasksel tasksel/first multiselect standard, ssh-server
 d-i pkgsel/include string \
     debootstrap \
     git \
-    linux-headers-$(uname --kernel-release) \
     sudo
 
 # Whether to upgrade packages after debootstrap.
