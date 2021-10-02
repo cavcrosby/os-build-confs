@@ -165,10 +165,8 @@ tasksel tasksel/first multiselect standard, ssh-server
 d-i pkgsel/include string \
     debootstrap \
     git \
-    jq \
     linux-headers-$(uname --kernel-release) \
-    sudo \
-    unzip
+    sudo
 
 # Whether to upgrade packages after debootstrap.
 # Allowed values: none, safe-upgrade, full-upgrade
