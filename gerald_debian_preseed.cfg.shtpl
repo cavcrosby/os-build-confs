@@ -202,7 +202,7 @@ d-i	popularity-contest/participate	boolean	false
 # directly, or use the apt-install and in-target commands to easily install
 # packages and run commands in the target system.
 d-i preseed/late_command string \
-    in-target /bin/sh -c 'echo "deb https://cavcrosby.jfrog.io/artifactory/deb/ stable main" > "/etc/apt/sources.list.d/cavcrosby-artifactory.list"'; \
+    in-target /bin/sh -c 'echo "deb https://cavcrosby.jfrog.io/artifactory/deb/ bullseye main" > "/etc/apt/sources.list.d/cavcrosby-artifactory.list"'; \
     in-target /bin/sh -c 'wget --quiet --output-document - "https://cavcrosby.jfrog.io/artifactory/api/gpg/key/public" | gpg --dearmor | dd of="/etc/apt/trusted.gpg.d/cavcrosby-artifactory.gpg"'; \
     in-target apt-get update; \
     in-target apt-get install debcomprt --assume-yes
