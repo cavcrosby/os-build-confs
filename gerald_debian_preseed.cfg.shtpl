@@ -164,7 +164,10 @@ tasksel tasksel/first multiselect standard, ssh-server
 
 # Individual additional packages to install
 d-i pkgsel/include string \
+    containerd.io \
     debootstrap \
+    docker-ce \
+    docker-ce-cli \
     git \
     sudo
 
@@ -205,6 +208,8 @@ d-i preseed/late_command string \
     in-target /bin/sh -c 'echo "deb https://cavcrosby.jfrog.io/artifactory/deb/ bullseye main" > "/etc/apt/sources.list.d/cavcrosby-artifactory.list"'; \
     in-target /bin/sh -c 'wget --quiet --output-document - "https://cavcrosby.jfrog.io/artifactory/api/gpg/key/public" | gpg --dearmor | dd of="/etc/apt/trusted.gpg.d/cavcrosby-artifactory.gpg"'; \
     in-target apt-get update; \
-    in-target apt-get install debcomprt --assume-yes
+    in-target apt-get install debcomprt --assume-yes; \
+    in-target groupadd docker; \
+    in-target usermod --append --groups docker ${NORMAL_USER_NAME}
 
 #_preseed_V1
