@@ -1,7 +1,3 @@
 # repo specific
-
-# normal files
 .conf
-
-# files generated from shtpls
 *.cfg
