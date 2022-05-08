@@ -2,7 +2,7 @@
 .DEFAULT_GOAL := help
 .RECIPEPREFIX := >
 
-# recursive variables
+# recursively expanded variables
 SHELL = /usr/bin/sh
 PROJECT_CONFIG_FILE_NAME = .conf
 
